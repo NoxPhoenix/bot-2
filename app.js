@@ -1,10 +1,8 @@
-const Discord = require('discord.js');
+const Promise = require('bluebird');
 
-global.admin = {};
-
+const bot = require('./bot');
 const { TOKEN } = require('./config');
 
-const bot = new Discord.Client();
 
 // Listener for RSS Feed changes for the podcast
 require('./utils/podcastFeed')(bot);
@@ -17,4 +15,7 @@ bot.on('ready', () => {
   console.log('I am ready!');
 });
 
-bot.login(TOKEN);
+const models = require('./models');
+
+Promise.map(Object.keys(models), model => models[model].sync())
+  .then(() => bot.login(TOKEN));

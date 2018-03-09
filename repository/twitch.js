@@ -35,5 +35,4 @@ module.exports = {
     usernames.forEach(username => promiseArray.push(twitch.getStreamInfoByUsername(username)));
     return Promise.all(promiseArray);
   },
-
 };

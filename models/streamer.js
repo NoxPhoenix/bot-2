@@ -13,10 +13,15 @@ module.exports = (database) => {
       twitchId: {
         type: Sequelize.STRING,
         allowNull: false,
+        unique: true,
       },
       twitchUsername: {
         type: Sequelize.STRING,
         allowNull: false,
+        unique: true,
+      },
+      live: {
+        type: Sequelize.BOOLEAN,
       },
     },
   );
@@ -24,7 +29,14 @@ module.exports = (database) => {
   Streamer.associate = (db) => {
     db.Streamer.belongsTo(
       db.User,
-      { as: 'user', targetKey: 'discordId' },
+      {
+        as: 'userId',
+        foreignKey: {
+          allowNull: false,
+          unique: true,
+        },
+        onDelete: 'CASCADE',
+      },
     );
   };
 

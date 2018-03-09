@@ -38,7 +38,14 @@ module.exports = (database) => {
   User.associate = (db) => {
     db.User.hasOne(
       db.Streamer,
-      { as: 'stream', foreignkey: 'discordId' },
+      {
+        as: 'stream',
+        foreignKey: {
+          allowNull: false,
+          unique: true,
+        },
+        onDelete: 'CASCADE',
+      },
     );
   };
 

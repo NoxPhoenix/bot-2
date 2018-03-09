@@ -2,7 +2,7 @@ const {
   User,
   Configuration,
   Channel,
-  Database,
+  Streamer,
 } = require('../models');
 
 function errWarn (err) {
@@ -75,22 +75,39 @@ module.exports = {
       .then(user => user.destroy());
   },
 
-  addStreamInfo (discordId, streamId) {
-    return User.findOrCreate({ where: { discordId } })
-      .spread(({ id }) => User.update({ streamId }, { where: { id } }));
+  // Streamer Management
+  createStreamer (userId, { twitchId, twitchUsername }) {
+    return Streamer.findOrCreate({
+      where: {
+        userId,
+      },
+      defaults: {
+        twitchId,
+        twitchUsername,
+      },
+    })
+      .spread(streamer => streamer);
   },
 
-  getAllStreamIds () {
-    return User.findAll({
-      where: {
-        streamId: {
-          $ne: null,
-        },
-      },
-      attributes: {
-        include: ['streamId'],
-      },
+  getStreamerByDiscordId (discordId) {
+    Streamer.findOne({
+      include: [{
+        model: User,
+        where: { discordId },
+      }],
     });
+  },
+
+  getAllStreamers () {
+    Streamer.findAll();
+  },
+
+  getAllLiveStreamers () {
+    Streamer.findAll({ where: { live: true } });
+  },
+
+  setLiveStatus (twitchUsername, status) {
+    Streamer.update({ live: status }, { where: { twitchUsername } });
   },
 
   // Alert channel management
