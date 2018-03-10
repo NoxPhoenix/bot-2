@@ -30,7 +30,6 @@ module.exports = (database) => {
     db.Streamer.belongsTo(
       db.User,
       {
-        as: 'userId',
         foreignKey: {
           allowNull: false,
           unique: true,

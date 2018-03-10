@@ -39,7 +39,6 @@ module.exports = (database) => {
     db.User.hasOne(
       db.Streamer,
       {
-        as: 'stream',
         foreignKey: {
           allowNull: false,
           unique: true,

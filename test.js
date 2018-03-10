@@ -1,5 +1,7 @@
-const Promise = require('bluebird');
-const { getStreamInfoByUsernames } = require('./repository');
+const repeat = require('repeat');
 
-getStreamInfoByUsernames(['Dareyck'])
-  .then(console.log);
+function print () {
+  console.log('hi');
+}
+
+repeat(print).every(20, 's').start.now();

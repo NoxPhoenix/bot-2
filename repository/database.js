@@ -90,7 +90,7 @@ module.exports = {
   },
 
   getStreamerByDiscordId (discordId) {
-    Streamer.findOne({
+    return Streamer.findOne({
       include: [{
         model: User,
         where: { discordId },
@@ -99,11 +99,11 @@ module.exports = {
   },
 
   getAllStreamers () {
-    Streamer.findAll();
+    return Streamer.findAll();
   },
 
   getAllLiveStreamers () {
-    Streamer.findAll({ where: { live: true } });
+    return Streamer.findAll({ where: { live: true } });
   },
 
   setLiveStatus (twitchUsername, status) {
