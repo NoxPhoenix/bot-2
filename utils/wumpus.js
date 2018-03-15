@@ -1,5 +1,7 @@
 const _ = require('lodash');
 
+const bot = require('../bot');
+
 const { PREFIX } = require('../config');
 
 module.exports = {
@@ -26,7 +28,7 @@ module.exports = {
   },
 
   getMemberIdInGuild (userInfo, membersMap) {
-    const member = userInfo.includes('@') ? membersMap.map.get(this.cleanIdFromUserTag(userInfo, membersMap)) : this.getMemberFromUsername(userInfo, membersMap);
+    const member = userInfo.includes('@') ? membersMap.get(this.cleanIdFromUserTag(userInfo, membersMap)) : this.getMemberFromUsername(userInfo, membersMap);
     if (!member) return null;
     return member.id;
   },

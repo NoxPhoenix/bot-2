@@ -38,19 +38,23 @@ module.exports = {
       ));
   },
 
-  // Scaleable channel configurations
-  getAllScaleableChannels () {
-    return Channel.findAll({ where: { type: 'scaleable' } })
+  // Scalable channel configurations
+  getAllScalableChannelIds () {
+    return Channel.findAll({ where: { type: 'scalable' } })
       .then(channels => channels.map(channel => channel.channelId));
   },
 
-  addScaleableChannel (channelId) {
+  addScalableChannel (channelId) {
     return Channel.findOrCreate({
       where: {
         channelId,
-        type: 'scaleable',
+        type: 'scalable',
       },
     });
+  },
+
+  deleteScalableChannel (channelId) {
+    return Channel.destroy({ where: { channelId } });
   },
 
   // Admins management
@@ -65,14 +69,16 @@ module.exports = {
   },
 
   getAllAlertChannels () {
-    return Channel.findAll({ where: { type: 'alert' } })
+    return Channel.findAll({ where: { type: 'streamAlert' } })
       .then(channels => channels.map(channel => channel.channelId));
   },
 
   // User account management
   deleteUserAccount (discordId) {
     return User.findOne({ where: { discordId } })
-      .then(user => user.destroy());
+      .then((user) => {
+        if (user) user.destroy();
+      });
   },
 
   // Streamer Management
@@ -87,6 +93,11 @@ module.exports = {
       },
     })
       .spread(streamer => streamer);
+  },
+
+  createStreamerWithDiscordId (discordId, twitchInfo) {
+    return User.findOrCreate({ where: { discordId } })
+      .spread(({ id }) => this.createStreamer(id, twitchInfo));
   },
 
   getStreamerByDiscordId (discordId) {

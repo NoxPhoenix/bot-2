@@ -7,8 +7,10 @@ const { TOKEN } = require('./config');
 // Listener for RSS Feed changes for the podcast
 require('./utils/podcastFeed')(bot);
 
+// Poll for any stored streamers and keep the db up to date
 require('./utils/streamPolling');
 
+// Listen and react to discord events
 require('./discordEventHandlers/messages')(bot);
 require('./discordEventHandlers/voiceChannels')(bot);
 require('./discordEventHandlers/server')(bot);

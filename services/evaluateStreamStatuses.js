@@ -12,18 +12,23 @@ const liveNotification = username => `${username} is now live! Check them out at
 function pushNotification (twitchUsername) {
   return getAllAlertChannels()
     .then((channels) => {
+      console.log(channels);
       if (channels.length) channels.map(channel => bot.channels.get(channel).send(liveNotification(twitchUsername)));
     });
 }
 
+// If there is no stream info for a streamer set to live in db, then there are now offline and their info must be set to 'off.'
 function verifyStoredStatus ({ twitchId, twitchUsername }, streamInfos) {
-  if (!streamInfos.find(({ id }) => id === twitchId)) setLiveStatus(twitchUsername, false);
+  if (!streamInfos.find(({ user_id: id }) => id === twitchId)) setLiveStatus(twitchUsername, false);
 }
 
-function synchronizeStatus ({ id }, streamers) {
+
+function synchronizeStatus ({ user_id: id }, streamers) {
   const streamer = streamers.find(({ twitchId }) => twitchId === id);
-  if (!streamer.live) setLiveStatus(streamer.twitchUsername, true);
-  pushNotification(streamer.twitchUsername);
+  if (!streamer.live) {
+    setLiveStatus(streamer.twitchUsername, true);
+    pushNotification(streamer.twitchUsername);
+  }
 }
 
 function evaluateStatuses (streamers, streamInfos) {

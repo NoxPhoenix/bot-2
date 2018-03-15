@@ -14,7 +14,7 @@ module.exports = {
   },
 
   getTwitchUserByUsername (username) {
-    return twitch.getTwitchUserByUsername(username);
+    return twitch.getTwitchUserByName(username);
   },
 
   getTwitchUsersByUsernames (usernames = []) {
