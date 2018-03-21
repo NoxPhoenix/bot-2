@@ -2,6 +2,7 @@ const voiceChannelEvents = require('../lib/eventResponders/voiceChannelEvents');
 
 function stateChangeType ({ oldState, newState }) {
   if (oldState.voiceChannelID !== newState.voiceChannelID && newState.voiceChannelID !== null) return 'joinedChannel';
+  if (oldState.voiceChannelID !== newState.voiceChannelID && newState.voiceChannelID !== null) return 'movedChannel';
   else if (newState.voiceChannelID === null) return 'leftChannel';
   return null;
 }
@@ -13,12 +14,12 @@ class VoiceChannelsHandler {
       const memberVoiceStateUpdate = { oldState, newState };
       switch (stateChangeType(memberVoiceStateUpdate)) {
         case 'joinedChannel':
-          voiceChannelEvents.join(memberVoiceStateUpdate);
-          break;
+          return voiceChannelEvents.join(memberVoiceStateUpdate);
+        case 'movedChannel':
+          return voiceChannelEvents.move(memberVoiceStateUpdate);
         case 'leftChannel':
-          voiceChannelEvents.leave(memberVoiceStateUpdate);
-          break;
-        default: break;
+          return voiceChannelEvents.leave(memberVoiceStateUpdate);
+        default: return null;
       }
     });
   }

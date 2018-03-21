@@ -3,9 +3,14 @@ const _ = require('lodash');
 
 const { addScalableChannel, deleteScalableChannel } = require('../repository');
 
+function channelIsDuplicate (channelName) {
+  if (channelName.match(/( [1-9])$/)) return true;
+  return false;
+}
+
 function baseChannelName (channelName) {
-  if (channelName.includes(channelName.match(/( [1-9])$/)[0])) return channelName.slice(0, -2);
-  return channelName;
+  if (!channelIsDuplicate(channelName)) return channelName;
+  return channelName.slice(0, -2);
 }
 
 const Scaler = {
@@ -39,7 +44,7 @@ const Scaler = {
   correctChannelNames (duplicates) {
     const sortedChannels = _.sortBy(duplicates, ['name']);
     const baseName = sortedChannels.shift().name;
-    for (let i = 0; i < sortedChannels.length; i += 1) {
+    for (let i = 0; i < sortedChannels.length; i++) {
       sortedChannels[i].setName(`${baseName} ${i + 2}`);
     }
   },

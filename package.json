@@ -27,7 +27,7 @@
     "lodash": "^4.17.4",
     "mysql2": "^1.5.2",
     "node-schedule": "^1.2.5",
-    "random-animal": "^1.0.7",
+    "random-animal": "https://github.com/NoxPhoenix/random-animal.git",
     "repeat": "0.0.6",
     "sequelize": "^4.35.0",
     "twitch-helix": "^1.0.7",
